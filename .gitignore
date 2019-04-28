@@ -1,0 +1,9 @@
+/target
+**/*.rs.bk
+
+# If you’re building a non-end product, such as a rust library that other rust packages will depend on, put Cargo.lock in your .gitignore.
+# https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
+Cargo.lock
+
+# JetBrains IDEs
+.idea/
