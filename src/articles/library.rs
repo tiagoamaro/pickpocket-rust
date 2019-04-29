@@ -120,8 +120,11 @@ impl Library {
 
         // Retrieve new articles from Pocket
         let api_list = api.retrieve()["list"].to_owned();
-        let api_articles: HashMap<String, serde_json::Value> =
-            serde_json::from_value(api_list).unwrap();
+        let api_articles =
+            match serde_json::from_value::<HashMap<String, serde_json::Value>>(api_list) {
+                Ok(articles) => articles,
+                Err(_) => HashMap::new(),
+            };
 
         let new_inventory: HashMap<String, Article> = api_articles
             .into_iter()
