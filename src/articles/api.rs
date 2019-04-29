@@ -1,6 +1,8 @@
+use crate::articles::article::Article;
 use crate::authentication::token_handler::TokenHandler;
 use crate::configuration::Configuration;
 use crate::logger;
+use serde_json::json;
 
 static ACTION_DELETE: &str = "delete";
 static STATE_UNREAD: &str = "unread";
@@ -49,5 +51,39 @@ impl API {
         }
     }
 
-    pub fn delete(&self, article_ids: Vec<String>) {}
+    pub fn delete(&self, articles: Vec<&Article>) {
+        let token_handler = TokenHandler::new();
+        let (consumer_key, pocket_send_url, access_token) = (
+            &self.configuration.consumer_key,
+            &self.configuration.pocket_send_url,
+            &token_handler.read_auth(),
+        );
+
+        let actions: serde_json::Value = articles
+            .into_iter()
+            .map(|article| {
+                json!({
+                    "action": ACTION_DELETE,
+                    "item_id": article.id,
+                })
+            })
+            .collect();
+
+        let params = [
+            ("consumer_key", consumer_key),
+            ("access_token", access_token),
+            ("actions", &actions.to_string()),
+        ];
+        let response = reqwest::Client::new()
+            .post(pocket_send_url)
+            .form(&params)
+            .send();
+
+        match response {
+            Ok(_) => {}
+            Err(error) => {
+                logger::log(&error.to_string());
+            }
+        }
+    }
 }

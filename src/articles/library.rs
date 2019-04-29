@@ -109,7 +109,7 @@ impl Library {
                     let article = Library::random_unread_article().unwrap();
 
                     Library::move_to_read(article.id);
-                    open::that(article.url);
+                    open::that(article.url).ok();
                 }
                 None => {
                     logger::log("You have read all articles!");
@@ -120,6 +120,11 @@ impl Library {
 
     pub fn renew() {
         let api = API::new();
+        let library = Library::load();
+
+        // Delete read articles from Pocket
+        let read_articles: Vec<&Article> = library.read.articles.values().collect();
+        api.delete(read_articles);
 
         // Retrieve new articles from Pocket
         let api_list = api.retrieve()["list"].to_owned();
