@@ -2,9 +2,7 @@ use crate::authentication::token_handler::TokenHandler;
 use crate::configuration::Configuration;
 use crate::logger;
 
-pub struct OAuth {
-    configuration: Configuration,
-}
+pub struct OAuth {}
 
 impl OAuth {
     pub fn request_authorization() {
