@@ -3,6 +3,7 @@ mod authentication;
 mod configuration;
 mod logger;
 
+use crate::configuration::Configuration;
 use articles::library::Library;
 use authentication::oauth::OAuth;
 use clap::{App, Arg, SubCommand};
@@ -32,6 +33,18 @@ fn main() {
                 "Show the number of read/unread articles you have on your local library",
             ))
             .get_matches();
+
+    // Guarantee ~/.pickpocket
+    let configuration = Configuration {
+        ..Default::default()
+    };
+    match std::fs::create_dir_all(configuration.home_folder) {
+        Ok(_) => {}
+        Err(error) => {
+            let message = format!("Could not create home folder. Motive: {}", error);
+            logger::log(&message);
+        }
+    };
 
     match matches.subcommand() {
         ("oauth", _) => {
