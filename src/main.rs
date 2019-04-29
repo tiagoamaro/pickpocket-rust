@@ -26,7 +26,9 @@ fn main() {
             ))
             .subcommand(SubCommand::with_name("pick").about(
                 "Picks a random article from your library (marking it as read)",
-            ).arg(Arg::with_name()))
+            ).arg(
+                Arg::with_name("quantity").short("q").help("Quantity of articles to open").required(true).takes_value(true)
+            ))
             .subcommand(SubCommand::with_name("renew").about(
                 "Syncs your local library with your Pocket. It will delete read articles and download new articles from your library",
             ))
@@ -35,32 +37,33 @@ fn main() {
             ))
             .get_matches();
 
-    match matches.subcommand_name() {
-        Some("oauth") => {
-            OAuth::new().request_authorization();
-        },
-        Some("authorize") => {
-            OAuth::new().authorize();
+    match matches.subcommand() {
+        ("oauth", _) => {
+            OAuth::request_authorization();
         }
-        Some("pick") => {
-//          Library::new().pick()
-            ()
-        },
-        _ => {logger::log("Awww"); ()},
-    };
+        ("authorize", _) => {
+            OAuth::authorize();
+        }
+        ("pick", Some(pick_matches)) => {
+            let quantity = pick_matches.value_of("quantity").unwrap();
 
-    //    let config: Configuration = Default::default();
-    //
-    //    // Guarantee ~/.pickpocket home folder
-    //    std::fs::create_dir(config.home_folder).ok();
-    //
-    //    let library = Library::new();
-    //    let oauth = OAuth::new();
-    //    let api = API::new();
-    //
-    //    //        oauth.request_authorization();
-    //    //                oauth.authorize();
-    //    library.renew();
-    //    library.pick(Some(1));
-    //    library.status();
+            match quantity.parse::<usize>() {
+                Ok(quantity) => {
+                    Library::pick(Some(quantity));
+                }
+                Err(_) => {
+                    logger::log("You must provide a valid quantity");
+                }
+            };
+        }
+        ("renew", _) => {
+            Library::renew();
+        }
+        ("status", _) => {
+            Library::status();
+        }
+        _ => {
+            logger::log("Option not found");
+        }
+    };
 }
