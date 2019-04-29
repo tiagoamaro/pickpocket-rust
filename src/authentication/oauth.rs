@@ -7,19 +7,16 @@ pub struct OAuth {
 }
 
 impl OAuth {
-    pub fn new() -> Self {
-        Self {
-            configuration: Default::default(),
-        }
-    }
-
-    pub fn request_authorization(&self) {
+    pub fn request_authorization() {
         let token_handler = TokenHandler::new();
+        let configuration = Configuration {
+            ..Default::default()
+        };
         let (auth_url, oauth_url, consumer_key, pocket_homepage) = (
-            &self.configuration.pocket_user_authorize_url,
-            &self.configuration.pocket_oauth_request_url,
-            &self.configuration.consumer_key,
-            &self.configuration.pocket_homepage,
+            &configuration.pocket_user_authorize_url,
+            &configuration.pocket_oauth_request_url,
+            &configuration.consumer_key,
+            &configuration.pocket_homepage,
         );
 
         // Fetch Pocket OAuth token
@@ -56,12 +53,15 @@ impl OAuth {
         token_handler.save_oauth(&response_token);
     }
 
-    pub fn authorize(&self) {
+    pub fn authorize() {
         let token_handler = TokenHandler::new();
+        let configuration = Configuration {
+            ..Default::default()
+        };
         let (uri, consumer_key, response_token) = (
-            &self.configuration.pocket_oauth_authorize_url,
-            &self.configuration.consumer_key,
-            token_handler.read_oauth(),
+            &configuration.pocket_oauth_authorize_url,
+            &configuration.consumer_key,
+            &token_handler.read_oauth(),
         );
 
         // Request authorization token (with OAuth token + consumer key)

@@ -86,7 +86,7 @@ impl Library {
         Library::write_inventory(&library);
     }
 
-    pub fn status(&self) {
+    pub fn status() {
         let library = Library::load();
 
         logger::log(&format!(
@@ -99,7 +99,7 @@ impl Library {
         ));
     }
 
-    pub fn pick(&self, quantity: Option<usize>) {
+    pub fn pick(quantity: Option<usize>) {
         let quantity = quantity.unwrap_or(1);
         let mut library = Library::load();
 
@@ -118,7 +118,7 @@ impl Library {
         }
     }
 
-    pub fn renew(&self) {
+    pub fn renew() {
         let api = API::new();
 
         // Retrieve new articles from Pocket
