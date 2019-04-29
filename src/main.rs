@@ -67,6 +67,7 @@ fn main() {
         }
         ("renew", _) => {
             Library::renew();
+            Library::status();
         }
         ("status", _) => {
             Library::status();
