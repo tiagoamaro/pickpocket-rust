@@ -7,13 +7,8 @@ use rand::seq::SliceRandom;
 use serde::{Deserialize, Serialize};
 use serde_yaml;
 use std::collections::HashMap;
-use std::ffi::OsString;
 use std::fs::File;
-use std::io::prelude::*;
-use std::io::Read;
 use std::path::Path;
-use std::path::PathBuf;
-use std::process::Command;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Library {
@@ -101,13 +96,10 @@ impl Library {
 
     pub fn pick(quantity: Option<usize>) {
         let quantity = quantity.unwrap_or(1);
-        let mut library = Library::load();
 
         for _ in 0..quantity {
             match Library::random_unread_article() {
                 Some(article) => {
-                    let article = Library::random_unread_article().unwrap();
-
                     Library::move_to_read(article.id);
                     open::that(article.url).ok();
                 }

@@ -3,13 +3,9 @@ mod authentication;
 mod configuration;
 mod logger;
 
-use articles::api::API;
 use articles::library::Library;
 use authentication::oauth::OAuth;
-use authentication::token_handler::TokenHandler;
 use clap::{App, Arg, SubCommand};
-use configuration::Configuration;
-use open;
 
 fn main() {
     let matches =
