@@ -1,5 +1,8 @@
 [package]
 name = "pickpocket"
+description = "Pickpocket: selects a random article from your Pocket (former Read It Later)"
+homepage = "https://github.com/tiagoamaro/pickpocket-rust"
+license = "MIT"
 version = "0.1.0"
 authors = ["Tiago Amaro <tiagopadrela@gmail.com>"]
 edition = "2018"
