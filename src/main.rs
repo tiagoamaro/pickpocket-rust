@@ -3,7 +3,6 @@ mod authentication;
 mod configuration;
 mod logger;
 
-use crate::configuration::Configuration;
 use articles::library::Library;
 use authentication::oauth::OAuth;
 use clap::{App, Arg, SubCommand};
@@ -34,17 +33,7 @@ fn main() {
             ))
             .get_matches();
 
-    // Guarantee ~/.pickpocket
-    let configuration = Configuration {
-        ..Default::default()
-    };
-    match std::fs::create_dir_all(configuration.home_folder) {
-        Ok(_) => {}
-        Err(error) => {
-            let message = format!("Could not create home folder. Motive: {}", error);
-            logger::log(&message);
-        }
-    };
+    Library::guarantee_home_folder();
 
     match matches.subcommand() {
         ("oauth", _) => {
