@@ -46,6 +46,25 @@ impl Configuration {
     }
 
     pub fn default() -> Self {
-        Self { ..Default::default() }
+        Self {
+            ..Default::default()
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::configuration::Configuration;
+
+    #[test]
+    fn allows_consumer_key_configuration_through_env() {
+        std::env::set_var("POCKET_CONSUMER_KEY", "my-super-pocket-consumer-key");
+        let config = Configuration::default();
+        assert_eq!("my-super-pocket-consumer-key", config.consumer_key);
+
+        // Without the env var
+        std::env::remove_var("POCKET_CONSUMER_KEY");
+        let config = Configuration::default();
+        assert_eq!("58132-f824d5fbf935681e22e86a3c", config.consumer_key);
     }
 }
