@@ -19,7 +19,8 @@ script:
 
 deploy:
   provider: releases
-  file: pickpocket-$TRAVIS_TAG-$TRAVIS_OS_NAME
+  api_key: $GITHUB_TOKEN
+  file: pickpocket-$TRAVIS_TAG-$TRAVIS_OS_NAME.tar.gz
   skip_cleanup: true
   on:
     branch: master
