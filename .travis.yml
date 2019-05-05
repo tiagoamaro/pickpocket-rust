@@ -12,3 +12,21 @@ os:
 
 matrix:
   fast_finish: true
+
+script:
+  - cargo test --verbose --all
+  - cargo build --release --verbose --all
+
+deploy:
+  provider: releases
+  file: pickpocket-$TRAVIS_TAG-$TRAVIS_OS_NAME
+  skip_cleanup: true
+  on:
+    branch: master
+    tags: true
+
+before_deploy:
+  - name="pickpocket-$TRAVIS_TAG-$TRAVIS_OS_NAME"
+  - mkdir $name
+  - cp target/release/pickpocket $name/
+  - tar czvf $name.tar.gz $name
