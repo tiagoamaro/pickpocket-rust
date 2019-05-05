@@ -24,19 +24,26 @@ impl Library {
         }
     }
 
-    fn write_inventory(library: &Library) {
-        let config = Configuration {
-            ..Default::default()
+    pub fn guarantee_home_folder() {
+        let config = Configuration::default();
+        match std::fs::create_dir_all(config.home_folder) {
+            Ok(_) => {}
+            Err(error) => {
+                let message = format!("Could not create home folder. Motive: {}", error);
+                logger::log(&message);
+            }
         };
+    }
+
+    fn write_inventory(library: &Library) {
+        let config = Configuration::default();
         let library_string = serde_yaml::to_string(library).unwrap();
 
         std::fs::write(config.library_file, library_string).ok();
     }
 
     fn load() -> Library {
-        let config = Configuration {
-            ..Default::default()
-        };
+        let config = Configuration::default();
 
         if !Path::new(&config.library_file).exists() {
             logger::log("Inventory file not found. Creating...");

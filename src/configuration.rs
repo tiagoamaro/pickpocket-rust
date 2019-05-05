@@ -19,18 +19,14 @@ pub struct Configuration {
     pub pocket_user_authorize_url: String,
 }
 
-fn home_folder() -> PathBuf {
-    dirs::home_dir().unwrap().join(".pickpocket")
-}
-
 impl Default for Configuration {
     fn default() -> Self {
         Configuration {
             // Files
-            authorization_token_file: home_folder().join("authorization_token"),
-            home_folder: home_folder(),
-            library_file: home_folder().join("library_file"),
-            oauth_token_file: home_folder().join("oauth_token"),
+            authorization_token_file: Self::home_folder().join("authorization_token"),
+            home_folder: Self::home_folder(),
+            library_file: Self::home_folder().join("library_file"),
+            oauth_token_file: Self::home_folder().join("oauth_token"),
             // Pocket
             consumer_key: env::var("POCKET_CONSUMER_KEY")
                 .unwrap_or("58132-f824d5fbf935681e22e86a3c".to_owned()),
@@ -41,5 +37,15 @@ impl Default for Configuration {
             pocket_send_url: "https://getpocket.com/v3/send".to_owned(),
             pocket_user_authorize_url: "https://getpocket.com/auth/authorize".to_owned(),
         }
+    }
+}
+
+impl Configuration {
+    pub fn home_folder() -> PathBuf {
+        dirs::home_dir().unwrap().join(".pickpocket")
+    }
+
+    pub fn default() -> Self {
+        Self { ..Default::default() }
     }
 }

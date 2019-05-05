@@ -7,9 +7,7 @@ pub struct OAuth {}
 impl OAuth {
     pub fn request_authorization() {
         let token_handler = TokenHandler::new();
-        let configuration = Configuration {
-            ..Default::default()
-        };
+        let configuration = Configuration::default();
         let (auth_url, oauth_url, consumer_key, pocket_homepage) = (
             &configuration.pocket_user_authorize_url,
             &configuration.pocket_oauth_request_url,
@@ -53,9 +51,7 @@ impl OAuth {
 
     pub fn authorize() {
         let token_handler = TokenHandler::new();
-        let configuration = Configuration {
-            ..Default::default()
-        };
+        let configuration = Configuration::default();
         let (uri, consumer_key, response_token) = (
             &configuration.pocket_oauth_authorize_url,
             &configuration.consumer_key,
