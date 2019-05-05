@@ -1,5 +1,7 @@
 # Pickpocket
 
+[![Build Status](https://travis-ci.com/tiagoamaro/pickpocket-rust.svg?branch=master)](https://travis-ci.com/tiagoamaro/pickpocket-rust)
+
 Pickpocket is a command line tool which will help you with your [Pocket](http://getpocket.com/) library. It selects a random article for you to read, opening your browser and marking it is deleted. 
 
 ## Installation
