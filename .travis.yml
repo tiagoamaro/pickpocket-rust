@@ -2,8 +2,6 @@ language: rust
 
 rust:
   - stable
-  - beta
-  - nightly
 
 cache: cargo
 
@@ -13,7 +11,4 @@ os:
   - windows
 
 matrix:
-  allow_failures:
-    - rust: beta
-    - rust: nightly
   fast_finish: true
