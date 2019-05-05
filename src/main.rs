@@ -10,7 +10,7 @@ use clap::{App, Arg, SubCommand};
 fn main() {
     let matches =
         App::new("Pickpocket")
-            .version("1.0")
+            .version(env!("CARGO_PKG_VERSION"))
             .author("Tiago Amaro <tiagopadrela@gmail.com>")
             .about("Selects a random article from your Pocket (former Read It Later)")
             .subcommand(
