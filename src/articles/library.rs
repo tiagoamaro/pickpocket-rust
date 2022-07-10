@@ -136,12 +136,20 @@ impl Library {
         let new_inventory: HashMap<String, Article> = api_articles
             .into_iter()
             .map(|(id, data)| {
+                let resolved_title = data["resolved_title"].as_str();
+                let given_title = data["given_title"].as_str();
+
+                let title = match resolved_title {
+                    Some(title) => title,
+                    None => given_title.unwrap_or(""),
+                };
+
                 (
                     id.to_string(),
                     Article {
                         id: id.to_owned(),
                         url: data["given_url"].as_str().unwrap().to_owned(),
-                        title: data["resolved_title"].as_str().unwrap().to_owned(),
+                        title: title.to_owned(),
                     },
                 )
             })
