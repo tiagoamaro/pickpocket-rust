@@ -6,11 +6,7 @@ Pickpocket is a command line tool which will help you with your [Pocket](http://
 
 ## Installation
 
-Pickpocket is distributed as a Rust crate, also having its Linux, MacOS and Windows binaries released on this repository.
-
-### Binaries
-
-Binaries for all OSes are available at the ["releases page"](https://github.com/tiagoamaro/pickpocket-rust/releases)
+Pickpocket is distributed as a Rust crate.
 
 ### cargo
 
