@@ -11,7 +11,7 @@ edition = "2018"
 [dependencies]
 clap = "2.33.0"
 dirs = "1.0.5"
-open = "1.2.2"
+open = "5.0.0"
 rand = "0.6.5"
 reqwest = "0.9.15"
 serde = { version = "1.0.90", features = ["derive"] }
