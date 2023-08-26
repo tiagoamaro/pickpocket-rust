@@ -43,7 +43,7 @@ impl OAuth {
         );
         let mut open_on_browser_url = url::Url::parse(auth_url).unwrap();
         open_on_browser_url.set_query(Some(&query_string));
-        open::that(open_on_browser_url.into_string()).ok();
+        open::that(<url::Url as Into<String>>::into(open_on_browser_url)).ok();
 
         // Save OAuth token on file
         token_handler.save_oauth(&response_token);
