@@ -6,8 +6,10 @@ mod logger;
 use articles::library::Library;
 use authentication::oauth::OAuth;
 use clap::{App, Arg, SubCommand};
+use tokio;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let matches =
         App::new("Pickpocket")
             .version(env!("CARGO_PKG_VERSION"))
@@ -34,13 +36,12 @@ fn main() {
             .get_matches();
 
     Library::guarantee_home_folder();
-
     match matches.subcommand() {
         ("oauth", _) => {
-            OAuth::request_authorization();
+            OAuth::request_authorization().await;
         }
         ("authorize", _) => {
-            OAuth::authorize();
+            OAuth::authorize().await;
         }
         ("pick", Some(pick_matches)) => {
             let quantity = pick_matches.value_of("quantity").unwrap();
@@ -55,7 +56,7 @@ fn main() {
             };
         }
         ("renew", _) => {
-            Library::renew();
+            Library::renew().await;
             Library::status();
         }
         ("status", _) => {
@@ -66,3 +67,4 @@ fn main() {
         }
     };
 }
+

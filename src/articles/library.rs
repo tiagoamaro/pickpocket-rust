@@ -50,8 +50,9 @@ impl Library {
             Library::write_inventory(&Library::new());
             File::open(&config.library_file).unwrap();
         }
-
+        logger::log(config.library_file.to_str().unwrap());
         let content = std::fs::read_to_string(config.library_file).unwrap();
+        logger::log(&content);
         serde_yaml::from_str::<Library>(&content).unwrap()
     }
 
@@ -117,16 +118,17 @@ impl Library {
         }
     }
 
-    pub fn renew() {
+    pub async fn renew() {
         let api = API::new();
         let library = Library::load();
 
         // Delete read articles from Pocket
         let read_articles: Vec<&Article> = library.read.articles.values().collect();
-        api.delete(read_articles);
+        api.delete(read_articles).await;
 
         // Retrieve new articles from Pocket
-        let api_list = api.retrieve()["list"].to_owned();
+        let value = api.retrieve().await; 
+        let api_list =  value["list"].to_owned();
         let api_articles =
             match serde_json::from_value::<HashMap<String, serde_json::Value>>(api_list) {
                 Ok(articles) => articles,

@@ -5,7 +5,7 @@ use crate::logger;
 pub struct OAuth {}
 
 impl OAuth {
-    pub fn request_authorization() {
+    pub async fn request_authorization() {
         let token_handler = TokenHandler::new();
         let configuration = Configuration::default();
         let (auth_url, oauth_url, consumer_key, pocket_homepage) = (
@@ -20,11 +20,15 @@ impl OAuth {
             ("consumer_key", consumer_key),
             ("redirect_uri", pocket_homepage),
         ];
-        let response = reqwest::Client::new().post(oauth_url).form(&params).send();
+        let response = reqwest::Client::new()
+        .post(oauth_url)
+        .form(&params)
+        .send()
+        .await;
 
         let response_token = match response {
-            Ok(mut response) => {
-                let response_text = response.text().unwrap();
+            Ok(response) => {
+                let response_text = response.text().await.unwrap();
                 let mut parse = url::form_urlencoded::parse(response_text.as_bytes());
 
                 let (_code, response_token) = parse.next().unwrap();
@@ -49,7 +53,7 @@ impl OAuth {
         token_handler.save_oauth(&response_token);
     }
 
-    pub fn authorize() {
+    pub async fn authorize() {
         let token_handler = TokenHandler::new();
         let configuration = Configuration::default();
         let (uri, consumer_key, response_token) = (
@@ -60,11 +64,15 @@ impl OAuth {
 
         // Request authorization token (with OAuth token + consumer key)
         let params = [("consumer_key", consumer_key), ("code", &response_token)];
-        let response = reqwest::Client::new().post(uri).form(&params).send();
+        let response = reqwest::Client::new()
+        .post(uri)
+        .form(&params)
+        .send()
+        .await;
 
         let response_token = match response {
-            Ok(mut response) => {
-                let response_text = response.text().unwrap();
+            Ok(response) => {
+                let response_text = response.text().await.unwrap();
                 let mut parse = url::form_urlencoded::parse(response_text.as_bytes());
 
                 let (_code, response_token) = parse.next().unwrap();

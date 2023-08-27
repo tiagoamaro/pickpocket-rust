@@ -18,7 +18,7 @@ impl API {
         }
     }
 
-    pub fn retrieve(&self) -> serde_json::Value {
+    pub async fn retrieve(&self) -> serde_json::Value {
         let token_handler = TokenHandler::new();
         let (consumer_key, pocket_retrieve_url, access_token) = (
             &self.configuration.consumer_key,
@@ -34,11 +34,12 @@ impl API {
         let response = reqwest::Client::new()
             .post(pocket_retrieve_url)
             .form(&params)
-            .send();
+            .send()
+            .await;
 
         match response {
-            Ok(mut response) => {
-                let response_text = response.text().unwrap();
+            Ok(response) => {
+                let response_text = response.text().await.unwrap();
                 let json: serde_json::Value = serde_json::from_str(&response_text).unwrap();
 
                 json.to_owned()
@@ -51,7 +52,7 @@ impl API {
         }
     }
 
-    pub fn delete(&self, articles: Vec<&Article>) {
+    pub async  fn delete(&self, articles: Vec<&Article>) {
         let token_handler = TokenHandler::new();
         let (consumer_key, pocket_send_url, access_token) = (
             &self.configuration.consumer_key,
@@ -77,7 +78,8 @@ impl API {
         let response = reqwest::Client::new()
             .post(pocket_send_url)
             .form(&params)
-            .send();
+            .send()
+            .await;
 
         match response {
             Ok(_) => {}
