@@ -1,3 +1,5 @@
+Note: https://getpocket.com will stop working on 8th of July 2025. This CLI tool is no longer relevant.
+
 # Pickpocket
 
 [![Build Status](https://travis-ci.com/tiagoamaro/pickpocket-rust.svg?branch=master)](https://travis-ci.com/tiagoamaro/pickpocket-rust)
